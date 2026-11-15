@@ -1,0 +1,12 @@
+#emailOtpField[hidden],.recovery-otp-actions[hidden]{display:none!important}
+#emailOtpField input{width:100%;min-height:44px;box-sizing:border-box;font-size:18px;letter-spacing:.3em;font-variant-numeric:tabular-nums}
+#emailOtpField small{display:block;font-size:12px;line-height:1.5;margin-top:8px;color:inherit;opacity:.85}
+.recovery-otp-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.recovery-otp-actions button{min-height:40px;max-width:100%;font-size:12px;padding:8px 12px;white-space:normal}
+.recovery-otp-actions button:last-child{flex-basis:100%;background:transparent;box-shadow:none;text-decoration:underline;text-underline-offset:3px}
+#emailAddress[readonly]{opacity:.8}
+[data-auth-mode="recover"] .login-recovery-link{display:none}
+#emailAuthMessage[data-state=error]{color:#c7495e}
+[data-sidaps-theme=dark] #emailAuthMessage[data-state=error]{color:#f4a8b6}
+#emailAuthMessage[data-state=success]{color:#368064}
+[data-sidaps-theme=dark] #emailAuthMessage[data-state=success]{color:#b0d4bd}

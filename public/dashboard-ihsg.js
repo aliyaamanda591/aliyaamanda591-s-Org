@@ -1,0 +1,35 @@
+// Public index data only. Does not read or send holdings, transactions or identity.
+(()=>{
+ const section=document.querySelector('.portfolio-insights'),flow=section?.querySelector('.flow-chart'),article=flow?.closest('.insight-card');if(!article)return;
+ const heading=article.querySelector('.insight-heading'),title=heading.querySelector('h3'),period=heading.querySelector('.sidaps-segmented')||heading.querySelector('select');
+ const tabs=document.createElement('div');tabs.className='market-chart-tabs';tabs.setAttribute('role','group');tabs.setAttribute('aria-label','Pilih grafik dashboard');
+ tabs.innerHTML='<button type="button" data-chart="ihsg" aria-pressed="true">IHSG</button><button type="button" data-chart="transactions" aria-pressed="false">Arus transaksi</button>';article.prepend(tabs);
+ const root=document.createElement('div');root.className='dashboard-ihsg';root.innerHTML='<div class="ihsg-overview"><div><div class="ihsg-value">—</div><span class="ihsg-change">Menunggu sumber</span></div><button type="button" class="ihsg-refresh" aria-label="Perbarui IHSG" title="Perbarui IHSG">↻</button></div><div class="ihsg-plot"></div><p class="ihsg-source" role="status" aria-live="polite"></p>';flow.after(root);
+ const plot=root.querySelector('.ihsg-plot'),value=root.querySelector('.ihsg-value'),change=root.querySelector('.ihsg-change'),source=root.querySelector('.ihsg-source'),refresh=root.querySelector('button');
+ const format=n=>n.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2});
+ function normalize(q){if(!q||q.code!=='IHSG'||q.kind!=='index'||!Number.isFinite(q.price)||q.price<=0||typeof q.source!=='string'||!Number.isFinite(Date.parse(q.fetchedAt)))return null;return {code:'IHSG',kind:'index',price:q.price,change:Number.isFinite(q.change)?q.change:null,points:(Array.isArray(q.points)?q.points:[]).filter(n=>Number.isFinite(n)&&n>0).slice(0,61),period:typeof q.period==='string'?q.period:'Sesi terakhir',source:q.source.slice(0,150),marketAt:Number.isFinite(Date.parse(q.marketAt))?q.marketAt:'',fetchedAt:q.fetchedAt,stale:q.stale===true};}
+ let quote=null,selected='ihsg',pending=false,failed=false,lastWidth=0,lastAttempt=0;
+ function stamp(time){return new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(time))+' WIB';}
+ function render(){
+  plot.replaceChildren();refresh.disabled=pending;
+  if(!quote){value.textContent='—';change.textContent='Indeks Harga Saham Gabungan';source.textContent=pending?'Mengambil data IHSG…':'Data IHSG belum tersedia. Coba perbarui nanti.';const p=document.createElement('p');p.className='ihsg-empty';p.textContent=pending?'Menyiapkan grafik IHSG…':'Sumber pasar belum mengirim grafik.';plot.append(p);return;}
+  root.classList.toggle('index-down',quote.change!==null&&quote.change<0);value.textContent=format(quote.price);const unit=document.createElement('small');unit.textContent=' poin';value.append(unit);
+  change.textContent=quote.change===null?'Perubahan belum tersedia':(quote.change>0?'+':'')+format(quote.change)+'%';change.className='ihsg-change '+(quote.change===null?'':quote.change<0?'red':'green');
+  source.textContent=(quote.stale||failed?'Tersimpan · ':'')+quote.source+' · '+stamp(quote.marketAt||quote.fetchedAt)+(quote.stale||failed?' · menunggu pembaruan':' · otomatis 5 menit');
+  const points=quote.points;if(points.length<2){const p=document.createElement('p');p.className='ihsg-empty';p.textContent='Nilai indeks tersedia. Grafik sesi belum tersedia dari sumber ini.';plot.append(p);return;}
+  const width=Math.max(220,Math.round(plot.getBoundingClientRect().width)||480),left=61,right=width-14,ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 '+width+' 210');svg.setAttribute('role','img');svg.setAttribute('aria-label','Grafik IHSG dalam poin · '+quote.period+' · '+(quote.stale||failed?'data tersimpan':'data dapat tertunda'));
+  const make=(tag,attrs,text)=>{const e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));if(text!==undefined)e.textContent=text;svg.append(e);return e;};
+  const min=Math.min(...points),max=Math.max(...points),pad=(max-min||min*.001)*.12,low=min-pad,high=max+pad,x=i=>left+i*(right-left)/(points.length-1),y=n=>168-(n-low)/(high-low)*145;
+  [min,(min+max)/2,max].filter((n,i,a)=>i===0||n!==a[i-1]).forEach(n=>{make('line',{x1:left,x2:right,y1:y(n),y2:y(n),class:'ihsg-grid'});make('text',{x:left-8,y:y(n)+4,'text-anchor':'end',class:'ihsg-axis'},format(n));});
+  make('polygon',{points:left+',178 '+points.map((n,i)=>x(i)+','+y(n)).join(' ')+' '+right+',178',class:'ihsg-area'});
+  make('polyline',{points:points.map((n,i)=>x(i)+','+y(n)).join(' '),class:'ihsg-line',fill:'none'});
+  points.forEach((n,i)=>{const point=make('circle',{cx:x(i),cy:y(n),r:i===points.length-1?3:2,class:'ihsg-point',tabindex:0,'aria-label':'IHSG '+format(n)+' poin'});const label=document.createElementNS(ns,'title');label.textContent=format(n)+' poin';point.append(label);});
+  make('text',{x:left,y:201,'text-anchor':'start',class:'ihsg-axis'},'Awal grafik');make('text',{x:right,y:201,'text-anchor':'end',class:'ihsg-axis'},'Terakhir');plot.append(svg);
+ }
+ async function load(force=false){if(pending||(!force&&(document.hidden||selected!=='ihsg'||!document.querySelector('#dashboard.active')||Date.now()-lastAttempt<300000)))return;pending=true;lastAttempt=Date.now();render();try{const response=await fetch('/api/market-board?assets=index%3AIHSG',{signal:AbortSignal.timeout(12000)});if(!response.ok)throw Error('Unavailable');const body=await response.json(),fresh=normalize(body.quotes?.find(q=>q.code==='IHSG'));if(!fresh)throw Error('No quote');quote=fresh;failed=false;try{localStorage.setItem('sidaps_dashboard_ihsg_v1',JSON.stringify({savedAt:Date.now(),quote}));}catch{}}catch{failed=true;}finally{pending=false;render();}}
+ function show(kind){selected=kind;const index=kind==='ihsg';root.hidden=!index;flow.hidden=index;if(period)period.hidden=index;title.textContent=index?'IHSG':'Arus transaksi';title.title=index?'Indeks Harga Saham Gabungan':'';tabs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.chart===kind)));if(index){render();load();}}
+ tabs.addEventListener('click',e=>{const button=e.target.closest('button[data-chart]');if(button)show(button.dataset.chart);});refresh.addEventListener('click',()=>load(true));
+ try{const cached=JSON.parse(localStorage.getItem('sidaps_dashboard_ihsg_v1')||'null');if(cached&&Date.now()-cached.savedAt<7*86400000){quote=normalize(cached.quote);if(quote)quote.stale=true;}}catch{}
+ if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>{const width=Math.round(entries[0].contentRect.width);if(width>0&&width!==lastWidth){lastWidth=width;if(selected==='ihsg')render();}}).observe(plot);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)load();});setInterval(()=>load(),300000);show('ihsg');
+})();

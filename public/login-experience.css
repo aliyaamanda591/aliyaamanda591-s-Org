@@ -1,0 +1,99 @@
+/* Login-only presentation. Uses the original Sidaps mark and existing palette. */
+#sidaps-portfolio[data-login-experience] {color-scheme:dark;background:#071b16}
+#sidaps-portfolio[data-login-experience] body.login-page{background:#071b16!important;color:#edf3ed!important;--login-muted:#abc1b4;--login-sage:#8db99e;font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+#sidaps-portfolio[data-login-experience] #authBack{position:relative;isolation:isolate;min-height:100svh;min-height:100dvh;padding:max(30px,env(safe-area-inset-top)) 16px max(30px,env(safe-area-inset-bottom));overflow:clip;background:radial-gradient(ellipse at 50% 8%,#153b2b80,transparent 56%),#071b16!important}
+.login-backdrop{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.login-backdrop:before{content:'';position:absolute;inset:0;background-image:linear-gradient(#8db99e08 1px,transparent 1px),linear-gradient(90deg,#8db99e08 1px,transparent 1px);background-size:88px 88px;mask-image:radial-gradient(ellipse at center,#000,transparent 75%)}
+.login-backdrop svg{position:absolute;width:min(1300px,140vw);height:auto;left:50%;top:50%;transform:translate(-50%,-50%);opacity:.14}
+#sidaps-portfolio[data-login-experience] #authBack .auth-entry{position:relative;z-index:1;display:flex;flex-direction:column;width:min(420px,100%);max-width:420px;gap:23px;margin:auto}
+#sidaps-portfolio[data-login-experience] #authBack .auth-brand{display:flex;align-items:center;justify-content:center;min-height:40px;text-decoration:none;color:#edf3ed!important;font:600 13px/1.4 system-ui,sans-serif;letter-spacing:1.6px;gap:11px}
+#sidaps-portfolio[data-login-experience] #authBack .auth-brand img{width:38px;height:38px;box-shadow:none!important;filter:none!important}
+#sidaps-portfolio[data-login-experience] #authBack .authcard{position:relative;overflow:hidden;padding:29px 28px;border:1px solid #345343!important;border-radius:22px!important;background:linear-gradient(145deg,#10291ff5,#0a211bf5)!important;color:#edf3ed!important;box-shadow:0 24px 65px #0003,0 1px 0 #ffffff05 inset!important}
+#sidaps-portfolio[data-login-experience] #authBack .authcard:before{content:'';position:absolute;top:0;left:22%;right:22%;height:1px;background:linear-gradient(90deg,transparent,#cbb37b80,transparent)}
+#sidaps-portfolio[data-login-experience] #authBack #authTitle{font:600 clamp(22px,4.8vw,25px)/1.3 system-ui,sans-serif!important;letter-spacing:-.6px;color:#f0f4ee!important;margin-bottom:8px!important}
+#sidaps-portfolio[data-login-experience] #authBack #authSub{color:var(--login-muted)!important;font-size:13px!important;line-height:1.65}
+#sidaps-portfolio[data-login-experience] #authBack .auth-intro{margin-bottom:23px}
+#sidaps-portfolio[data-login-experience] #authBack #emailAuthForm{gap:15px}
+#sidaps-portfolio[data-login-experience] #authBack .field{gap:7px}
+#sidaps-portfolio[data-login-experience] #authBack #emailAuthForm .field label{font:500 12px/1.5 system-ui,sans-serif!important;letter-spacing:0;color:#dae6dd!important}
+.login-input,.login-page .password-control{position:relative;display:flex;align-items:center;width:100%}
+.login-field-icon{position:absolute;left:13px;z-index:1;width:18px;height:18px;pointer-events:none;color:#839f8e;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#sidaps-portfolio[data-login-experience] #authBack .cloud-signin input{height:47px;min-height:47px;width:100%;padding:11px 13px 11px 40px;border:1px solid #355044!important;border-radius:10px;background:#081d17!important;color:#edf3ed!important;-webkit-text-fill-color:#edf3ed!important;caret-color:#8db99e;box-shadow:none!important;font:400 16px/1.4 system-ui,sans-serif;transition:border-color .18s,box-shadow .18s,background-color .18s}
+#sidaps-portfolio[data-login-experience] #authBack .password-control input{padding-right:48px}
+#sidaps-portfolio[data-login-experience] #authBack .cloud-signin input::placeholder{color:#86a18f!important;-webkit-text-fill-color:#86a18f!important;opacity:1}
+#sidaps-portfolio[data-login-experience] #authBack .cloud-signin input:focus{outline:0;background:#0b241c!important;border-color:#8db99e!important;box-shadow:0 0 0 3px #8db99e18!important}
+.login-input:focus-within>.login-field-icon,.login-page .password-control:focus-within>.login-field-icon{color:#b8d5c2}
+#sidaps-portfolio[data-login-experience] #authBack .cloud-signin input[aria-invalid=true]{border-color:#bc818a!important}
+#sidaps-portfolio[data-login-experience] #authBack .cloud-signin input:-webkit-autofill{-webkit-text-fill-color:#edf3ed!important;-webkit-box-shadow:0 0 0 1000px #081d17 inset!important;caret-color:#edf3ed}
+#sidaps-portfolio[data-login-experience] #authBack .password-toggle{color:#a8c3b1!important;background:transparent!important;transition:color .15s,background-color .15s;min-width:44px;min-height:43px;top:2px;bottom:2px}
+#sidaps-portfolio[data-login-experience] #authBack .password-toggle:hover{color:#e1d0a8!important;background:#8db99e0d!important}
+.login-page .password-toggle svg{transition:transform .18s}.login-page .password-toggle[aria-pressed=true] svg{transform:scale(.92)}
+#sidaps-portfolio[data-login-experience] #authBack #emailSubmit{display:flex;align-items:center;justify-content:center;gap:9px;min-height:47px;background:linear-gradient(110deg,#a8c8b1,#8db99e)!important;border-color:#b1d2ba!important;border-radius:10px!important;color:#092319!important;box-shadow:0 3px 10px #0002!important;font:600 14px/1.4 system-ui,sans-serif;transition:transform .15s,box-shadow .18s,filter .18s}
+#sidaps-portfolio[data-login-experience] #authBack #emailSubmit:hover:not(:disabled){box-shadow:0 5px 20px #8db99e26!important;filter:brightness(1.05)}
+#sidaps-portfolio[data-login-experience] #authBack :is(#emailSubmit,.google-signin-button):active:not(:disabled){transform:translateY(1px) scale(.995)}
+#sidaps-portfolio[data-login-experience] #authBack .login-recovery-link button{border:0;background:transparent!important;cursor:pointer;padding:0 0 0 8px;color:#d5bd87!important;font:500 12px system-ui,sans-serif;min-height:29px}
+.login-page .login-recovery-link{text-align:right}
+.login-page #authBack[data-auth-mode=login] .email-auth-links button[onclick="cloudAuthSetMode('login')"]{display:none}
+.login-page #authBack:not([data-auth-mode=login]) .new-account-hint{display:none}
+.login-page .account-recovery-modal .modalactions{display:flex;justify-content:flex-end;margin-top:16px;gap:8px}
+#sidaps-portfolio[data-login-experience] #authBack .google-divider{color:#9cb4a6;margin:19px 0 15px;font-size:12px}
+#sidaps-portfolio[data-login-experience] #authBack .google-divider:before,#sidaps-portfolio[data-login-experience] #authBack .google-divider:after{background:#355044}
+#sidaps-portfolio[data-login-experience] #authBack .google-signin-button{background:#132e23!important;color:#edf3ed!important;border:1px solid #3a5949!important;border-radius:10px;min-height:47px;font:500 13px system-ui,sans-serif;transition:background-color .18s,transform .15s,border-color .18s}
+#sidaps-portfolio[data-login-experience] #authBack .google-signin-button:hover:not(:disabled){background:#1b3a2b!important;border-color:#8db99e!important}
+#sidaps-portfolio[data-login-experience] #authBack .email-auth-links{color:#a7beb0!important;font-size:12px;gap:10px;margin-top:17px}
+#sidaps-portfolio[data-login-experience] #authBack .new-account-hint{color:#a7beb0!important}
+#sidaps-portfolio[data-login-experience] #authBack .email-auth-links button{color:#d5bd87!important;font:600 12px system-ui,sans-serif;min-height:35px}
+#sidaps-portfolio[data-login-experience] #authBack .demo-entry{background:transparent!important;border:0!important;border-top:1px solid #355044!important;border-radius:0!important;color:#a8c3b1!important;box-shadow:none!important;font:500 12px system-ui,sans-serif;margin:17px 0 0;padding-top:17px;min-height:40px}
+#sidaps-portfolio[data-login-experience] #authBack :is(.signup-privacy,.google-auth-message){color:#a7beb0!important;font-size:12px;line-height:1.7}
+#sidaps-portfolio[data-login-experience] #authBack .signup-privacy{font-size:11px;margin-top:14px!important}
+#sidaps-portfolio[data-login-experience] #authBack :is(.profile-message,.google-auth-message[data-state=error]){color:#f0bdc5!important;background:#48272b55;border:1px solid #80545a80;border-radius:9px;padding:9px 11px;font-size:12px!important;line-height:1.6;text-align:left}
+#sidaps-portfolio[data-login-experience] #authBack :is(.profile-message,.google-auth-message):empty{display:none}
+#sidaps-portfolio[data-login-experience] body[data-auth-busy] #emailAuthMessage,#sidaps-portfolio[data-login-experience] #authBack .google-auth-message[data-state=busy]{color:#c5ddce!important;background:#193e2b77;border-color:#4d7660!important}
+#sidaps-portfolio[data-login-experience] #authBack [data-state=success]{color:#c5ddce!important;background:#193e2b77!important;border-color:#4d7660!important}
+#sidaps-portfolio[data-login-experience] .google-auth-help :is(button,a){color:#dfcba2;background:#132e23;border-color:#49614d;font-size:12px}
+#sidaps-portfolio[data-login-experience] .account-recovery-modal{background:#04130deb;z-index:110}
+#sidaps-portfolio[data-login-experience] .account-recovery-modal .modal{background:#10291f;border-color:#3c5c48;color:#edf3ed;max-height:calc(100dvh - 32px);overflow:auto}
+#sidaps-portfolio[data-login-experience] .account-recovery-modal :is(h3,p){color:#d5e5d9!important}
+#sidaps-portfolio[data-login-experience] .account-recovery-modal .codebox{background:#081d17;border-color:#4d634d;color:#e2ca94;font-size:15px}
+#sidaps-portfolio[data-login-experience] .account-recovery-modal .btn{background:#173b2a!important;color:#edf3ed!important;border-color:#50715a!important;min-height:44px;font-size:13px}
+.login-page button[aria-busy=true]:before{content:'';display:inline-block;flex:0 0 15px;width:15px;height:15px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:login-spin .7s linear infinite}
+.login-page .google-signin-button[aria-busy=true]>svg{display:none}
+.login-page[data-auth-busy] .email-auth-links button,.login-page[data-auth-busy] .login-recovery-link button{opacity:.55;cursor:wait}
+.login-page.login-leaving .auth-entry{opacity:.4;transform:translateY(-5px);transition:opacity .18s,transform .18s}
+.login-page[data-page-hidden] *{animation-play-state:paused!important}
+#sidaps-portfolio[data-login-experience] :is(button,a):focus-visible{outline:2px solid #d5bd87!important;outline-offset:4px}
+/* A finite decorative chart reveal: no market values, canvas loop or price API. */
+.sidaps-intro{position:fixed;inset:0;z-index:100;display:none;place-items:center;overflow:hidden;background:#071b16;color:#edf3ed}
+.sidaps-intro[hidden]{display:none!important}
+.login-intro-pending .sidaps-intro{display:grid;animation:intro-out .32s 1.95s both;pointer-events:auto}
+.intro-stage{position:relative;width:min(760px,100%);text-align:center;padding:20px;isolation:isolate}
+.intro-stage:before{content:'';position:absolute;z-index:-1;width:min(540px,100vw);height:340px;left:50%;top:40%;transform:translate(-50%,-50%);background:radial-gradient(ellipse,#28583c55,transparent 68%);opacity:0;animation:intro-glow 1s .05s both}
+.intro-visual{position:relative;height:218px;display:grid;place-items:center;margin-bottom:8px}
+.intro-chart{position:absolute;width:100%;height:218px;inset:0;overflow:visible}
+.intro-chart .intro-grid{stroke:#8db99e;stroke-width:1;opacity:.09}
+.intro-candle{opacity:0;transform:translateY(7px);animation:candle-in .38s var(--candle-delay,.4s) both}
+.intro-candle.up{fill:#8db99e;stroke:#8db99e}.intro-candle.down{fill:#a56e77;stroke:#a56e77}
+.intro-candle line{stroke-width:1.2}.intro-candle rect{stroke:none;rx:1}
+.intro-price{fill:none;stroke:#67ac8b;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:price-draw 1.15s .55s both}
+.intro-reference{fill:none;stroke:#cfb376;stroke-width:1;opacity:.35;stroke-dasharray:1;stroke-dashoffset:1;animation:price-draw 1s .7s both}
+.intro-price-point{fill:#c7dfcf;stroke:#67ac8b;stroke-width:3;opacity:0;animation:point-in .35s 1.45s both}
+.intro-mark{position:relative;z-index:2;width:108px;height:108px;opacity:0;transform:scale(.88);animation:mark-in .65s .18s both,mark-out .32s 1.95s forwards;filter:none}
+.intro-brand{margin:0;font:600 clamp(17px,3.5vw,22px)/1.4 system-ui,sans-serif;letter-spacing:clamp(2px,.6vw,4px);opacity:0;animation:brand-in .28s 1.62s both}
+.intro-tagline{color:#c8b788;font:500 clamp(8px,1.9vw,10px)/1.6 system-ui,sans-serif;letter-spacing:2px;margin:10px 0 0;opacity:0;animation:brand-in .25s 1.7s both}
+.intro-disclaimer{font:400 10px/1.5 system-ui,sans-serif;color:#8eac9a;margin:25px 0 0;opacity:0;animation:brand-in .2s 1.74s both}
+.intro-skip{position:absolute;right:max(18px,env(safe-area-inset-right));top:max(18px,env(safe-area-inset-top));border:1px solid #3e5a49;border-radius:8px;padding:8px 13px;min-height:40px;color:#bfd2c5;background:#0d261e;font:500 12px system-ui,sans-serif;cursor:pointer}
+.login-intro-pending .auth-entry{animation:login-entry .38s 1.88s both}
+@keyframes mark-in{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes mark-out{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.72)}}
+@keyframes intro-glow{to{opacity:1}}
+@keyframes candle-in{to{opacity:.8;transform:translateY(0)}}
+@keyframes price-draw{to{stroke-dashoffset:0}}
+@keyframes point-in{to{opacity:.85}}
+@keyframes brand-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes intro-out{0%{opacity:1}100%{opacity:0;visibility:hidden;pointer-events:none;transform:scale(.98)}}
+@keyframes login-entry{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes login-spin{to{transform:rotate(360deg)}}
+@media(max-width:430px){#sidaps-portfolio[data-login-experience] #authBack{padding:24px 14px}#sidaps-portfolio[data-login-experience] #authBack .authcard{padding:24px 20px;border-radius:18px!important}#sidaps-portfolio[data-login-experience] #authBack .auth-entry{gap:19px}.intro-visual{height:180px}.intro-chart{height:180px;width:155%;left:-27.5%;inset-block:0}.intro-mark{width:90px;height:90px}.intro-disclaimer{font-size:10px;margin-top:22px}.login-backdrop svg{width:210vw;opacity:.09}}
+@media(max-width:359px){#sidaps-portfolio[data-login-experience] #authBack .authcard{padding:22px 16px}.intro-tagline{letter-spacing:1.2px}}
+@media(prefers-reduced-motion:reduce){.sidaps-intro,.login-backdrop{display:none!important}.login-intro-pending .auth-entry{animation:none!important;opacity:1!important;transform:none!important}#sidaps-portfolio[data-login-experience] .login-page *{animation:none!important;transition:none!important}.login-page.login-leaving .auth-entry{opacity:1;transform:none}}
+@media print{.sidaps-intro,.login-backdrop{display:none!important}}

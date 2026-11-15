@@ -1,0 +1,9 @@
+#profileGooglePhoto[hidden]{display:none!important}
+html[data-sidaps-theme] body .profile-photo-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-width:0}
+html[data-sidaps-theme] body .profile-photo-controls p{flex-basis:100%;margin:0!important;font-size:12px!important;line-height:1.6!important;color:var(--sp-muted)!important}
+html[data-sidaps-theme] body #profilePhotoSource{color:var(--sp-text)!important;font-weight:500}
+html[data-sidaps-theme] body .profile-photo-preview{background:var(--sp-raised)!important;border-color:var(--sp-border)!important;color:var(--gold)!important;flex-shrink:0;overflow:hidden}
+.profile-photo-preview img,.avatar img,#adminAvatar img{object-fit:cover;width:100%;height:100%;display:block}
+html[data-sidaps-theme] body .profile-local-note{background:var(--sp-raised)!important;border:1px solid var(--sp-border)!important;color:var(--sp-muted)!important;border-radius:12px}
+html[data-sidaps-theme] body .profile-local-note span{color:inherit!important;font-size:12px!important;line-height:1.6!important}
+@media(max-width:430px){html[data-sidaps-theme] body .profile-photo-section{gap:12px}.profile-photo-controls .btn{font-size:12px!important;min-height:42px}.profile-photo-preview{width:64px!important;height:64px!important}.profile-dialog{padding:18px!important}}

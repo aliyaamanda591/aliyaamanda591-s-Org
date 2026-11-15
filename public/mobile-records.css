@@ -1,0 +1,27 @@
+.record-summary,.portfolio-record-toggle{display:none}.record-original{display:contents}
+@media(max-width:760px){
+html[data-sidaps-theme] body .phone-table :is(tr[data-compact-record]){display:block!important;padding:0!important;gap:0!important;border-radius:12px!important;overflow:hidden;box-shadow:none!important}
+html[data-sidaps-theme] body .phone-table tr[data-compact-record] td:first-child{display:block!important;grid-column:1/-1!important;padding:0!important;overflow:visible!important}
+html[data-sidaps-theme] body .phone-table tr[data-compact-record] td:first-child:before{display:none!important}
+html[data-sidaps-theme] body .phone-table tr[data-compact-record] .record-original{display:none!important}
+html[data-sidaps-theme] body .phone-table tr[data-compact-record]>td:not(:first-child){display:none!important}
+html[data-sidaps-theme] body .phone-table tr.compact-record-open{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important;padding:0 12px 12px!important}
+html[data-sidaps-theme] body .phone-table tr.compact-record-open>td:not(:first-child){display:block!important}
+html[data-sidaps-theme] body .phone-table tr.compact-record-open>td:first-child{margin:0 -12px;width:calc(100% + 24px)!important;border-bottom:1px solid var(--sp-border)!important}
+html[data-sidaps-theme] body .phone-table[data-phone-kind=transactions] tr.compact-record-open>td:nth-child(2){justify-self:start;text-align:left!important}
+html[data-sidaps-theme] body .phone-table .record-summary{display:grid;grid-template-columns:minmax(0,1fr) auto 12px;gap:10px;align-items:center;width:100%;min-height:78px;padding:12px;border:0;border-radius:0;color:var(--sp-text);background:transparent;text-align:left;font-family:var(--font-body);box-sizing:border-box;cursor:pointer}
+html[data-sidaps-theme] body .phone-table .record-summary.has-logo{grid-template-columns:28px minmax(0,1fr) auto 12px;gap:8px}.record-summary .asset-logo{width:28px!important;height:28px!important;min-width:28px;flex-basis:28px}
+.record-identity,.record-amounts{display:flex;flex-direction:column;gap:5px;min-width:0}.record-identity strong{font-size:13px;font-weight:600;line-height:1.4;overflow-wrap:anywhere}.record-identity small{font-size:11px;line-height:1.45;color:var(--sp-muted);overflow-wrap:anywhere}.record-amounts{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}.record-amounts strong{font-size:14px;font-weight:600;line-height:1.4}.record-amounts small{font-size:11px;line-height:1.4;font-weight:500}.record-in{color:var(--accent)}.record-out{color:var(--gold)}.record-chevron{font-size:17px;color:var(--sp-muted)}.compact-record-open .record-chevron{transform:rotate(180deg)}
+html[data-sidaps-theme] body #transactionViewport{max-height:280px!important;min-height:0!important;scrollbar-width:thin;padding:8px!important;scroll-behavior:auto!important}
+html[data-sidaps-theme] body .phone-table tbody{gap:7px!important}
+html[data-sidaps-theme] body #dashboard .portfolio-table:not(.portfolio-records-open){display:none!important}
+html[data-sidaps-theme] body .portfolio-record-toggle{display:inline-flex;align-items:center;justify-content:center;min-height:40px;font-size:12px!important}
+html[data-sidaps-theme] body .portfolio-record-section>button:not(.portfolio-record-toggle){display:none!important}
+html[data-sidaps-theme] body .record-amounts small.red{color:var(--red)!important}html[data-sidaps-theme] body .record-amounts small.green{color:var(--green)!important}
+html[data-sidaps-theme] body #dashboard .portfolio-table{max-height:320px!important;padding:8px!important}
+html[data-sidaps-theme] body #scrollToggle,html[data-sidaps-theme] body #dashboard .scroll-hint{display:none!important}
+html[data-sidaps-theme] body .scroll-tools{width:auto!important;margin-left:auto}.scroll-tools .btn{font-size:12px!important}
+html[data-sidaps-theme] body .tablewrap .market-session{background:transparent!important;box-shadow:none!important;color:var(--sp-muted)!important;padding:0!important;font-size:11px!important;line-height:1.5!important;max-width:100%;white-space:normal}
+html[data-sidaps-theme] body:not(.landing-page):not(.login-page)>footer{padding:16px 14px!important;margin:12px 0 0!important;font-size:11px!important;line-height:1.6}
+@media(max-width:359px){html[data-sidaps-theme] body .phone-table .record-summary{gap:7px;padding:11px 10px;min-height:76px}.record-amounts strong{font-size:13px}.record-identity strong{font-size:12px}.record-identity small{font-size:10px}.record-summary.has-logo{grid-template-columns:25px minmax(0,1fr) auto 10px!important;gap:6px!important}.record-summary .asset-logo{width:25px!important;height:25px!important;min-width:25px}}
+}

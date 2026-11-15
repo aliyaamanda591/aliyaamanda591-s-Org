@@ -1,0 +1,19 @@
+/* Keep chart text at CSS-pixel size instead of shrinking a desktop drawing. */
+html[data-sidaps-theme] body .flow-chart svg{width:100%;height:220px!important;display:block;overflow:visible}
+html[data-sidaps-theme] body .flow-chart .chart-axis{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:12px!important;font-weight:500;fill:var(--sp-muted)!important;opacity:1;letter-spacing:0}
+html[data-sidaps-theme] body .flow-chart .flow-line{vector-effect:non-scaling-stroke;stroke-width:2}
+html[data-sidaps-theme] body .realized-details>summary strong{color:var(--sp-text)}
+html[data-sidaps-theme] body .realized-details>summary strong.red{color:var(--red)!important}html[data-sidaps-theme] body .realized-details>summary strong.green{color:var(--green)!important}
+@media(max-width:760px){
+html[data-sidaps-theme=dark]{--sp-muted:#bed0c4}
+html[data-sidaps-theme=light]{--sp-muted:#4c6154}
+html[data-sidaps-theme] body{--font-body:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;--font-display:var(--font-body);font-family:var(--font-body)!important;font-synthesis:none;text-rendering:auto}
+html[data-sidaps-theme] body :is(.quote-status,.section .status,.idx-market-summary,.asset-mobile-hint,.chart-legend,.insight-chip,.sale-summary-state,.scroll-hint){font-family:var(--font-body)!important;font-size:12px!important;font-weight:450!important;line-height:1.6!important;color:var(--sp-muted)!important;opacity:1;text-shadow:none;filter:none;letter-spacing:0}
+html[data-sidaps-theme] body .chart-legend{gap:16px;margin-bottom:8px}
+html[data-sidaps-theme] body .flow-chart{min-height:250px!important}
+html[data-sidaps-theme] body :is(.record-identity small,.asset-mobile-identity small,.donut-legend li,.donut-center span){color:var(--sp-muted)!important;font-weight:450!important;opacity:1;letter-spacing:0}
+html[data-sidaps-theme] body .asset-mobile-identity small,html[data-sidaps-theme] body .record-identity small{font-size:12px!important}
+html[data-sidaps-theme] body :is(.record-amounts strong,.asset-mobile-amounts strong){font-weight:600!important;text-shadow:none;letter-spacing:0}
+html[data-sidaps-theme] body .sale-summary .label{font-size:12px!important;font-weight:500!important;letter-spacing:0}
+html[data-sidaps-theme] body .flow-chart .chart-grid{stroke:var(--sp-border);opacity:.8}
+}

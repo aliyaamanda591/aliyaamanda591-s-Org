@@ -1,0 +1,9 @@
+html[data-sidaps-theme] body .asset-search-tools{grid-template-columns:minmax(0,1fr)!important;gap:10px!important}
+html[data-sidaps-theme] body .sidaps-segmented[data-select-id=assetKindFilter]{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;box-sizing:border-box}
+html[data-sidaps-theme] body .sidaps-segmented[data-select-id=assetKindFilter] button{font-size:12px!important;min-height:40px;padding:8px 6px;white-space:nowrap}
+html[data-sidaps-theme] body .platform-other-button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;margin-top:7px;padding:7px 11px;border:1px solid var(--sp-border);background:var(--sp-raised);color:var(--sp-text);border-radius:9px;font:500 12px var(--font-body);cursor:pointer}
+.platform-other-button+.platform-hint{display:block;margin-top:6px}
+.asset-source-info{margin-top:10px;border-top:1px solid var(--sp-border);color:var(--sp-muted)}.asset-source-info>summary{min-height:36px;padding:9px 0;font-size:12px;font-weight:500;cursor:pointer}.asset-source-info p{font-size:12px!important;line-height:1.6!important;margin:0 0 10px!important}
+@media(max-width:359px){html[data-sidaps-theme] body .sidaps-segmented[data-select-id=assetKindFilter] button{padding-inline:3px;font-size:11px!important}}
+
+#assetPickerForm .field[hidden]{display:none!important}

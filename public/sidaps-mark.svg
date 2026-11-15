@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Logo Sidaps Portfolio">
+  <rect x="1" y="1" width="62" height="62" rx="18" fill="#273546" stroke="#647080"/>
+  <path d="M48 15H29c-9 0-14 4-14 10s5 9 13 10l8 1c9 1 13 4 13 10S43 55 34 55H15" stroke="#DFC58B" stroke-width="7" stroke-linecap="square"/>
+  <path d="M8 47C3 37 15 19 34 12c11-4 20-3 23 2M8 47c3 4 10 5 18 3" stroke="#90A99B" stroke-width="1.8" stroke-linecap="round"/>
+  <g stroke="#273546" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M25 31v15m8-21v15m8-22v15"/>
+    <path d="M23 35h4v7h-4zm8-7h4v8h-4zm8-5h4v7h-4z"/>
+  </g>
+  <g stroke="#8DB99E" stroke-width="1.5" stroke-linecap="round">
+    <path d="M25 31v15m8-21v15m8-22v15"/>
+  </g>
+  <path d="M23 35h4v7h-4zm8-7h4v8h-4zm8-5h4v7h-4z" fill="#8DB99E"/>
+</svg>
