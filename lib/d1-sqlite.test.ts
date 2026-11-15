@@ -160,7 +160,7 @@ test('modular landing, login, and portfolio HTML assemblies include required mar
   assert.ok(landingHtml.includes('Sidaps Portfolio'));
 
   assert.ok(loginHtml.includes('id="emailAuthForm"'));
-  assert.ok(loginHtml.includes('/recovery-otp.js?v=6'));
+  assert.ok(loginHtml.includes('/recovery-otp.js?v=7'));
   assert.ok(loginHtml.includes('/login-experience.js?v=4'));
 
   assert.ok(portfolioHtml.includes('/*__CLOUD_BOOTSTRAP__*/null'));

@@ -45,4 +45,4 @@ async function googleSignIn(){
 }
 if(!getAuth())prepareGoogleSignIn();
 
-cloudAuthSetMode('login');</script><script src="/recovery-otp.js?v=6" defer></script><script src="/login-experience.js?v=4" defer></script></body></html>`;
+cloudAuthSetMode('login');</script><script src="/recovery-otp.js?v=7" defer></script><script src="/login-experience.js?v=4" defer></script></body></html>`;

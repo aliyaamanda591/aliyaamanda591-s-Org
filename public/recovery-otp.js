@@ -96,18 +96,19 @@
     introCopy.appendChild(accountChip);
   }
 
-  // Clean, compact link input for 'sent' stage
-  const pasteBox = document.createElement('div');
-  pasteBox.className = 'oob-paste-box';
-  pasteBox.id = 'oobPasteBox';
-  pasteBox.hidden = true;
-  pasteBox.innerHTML =
-    '<label for="oobLinkInput">Sudah menerima email? Tempel tautan reset di sini:</label>' +
-    '<div class="oob-paste-row">' +
-    '<input type="url" id="oobLinkInput" autocomplete="off" placeholder="Tempel tautan dari email…">' +
-    '<button type="button" class="btn primary" id="oobOpenFormBtn">Lanjutkan</button>' +
-    '</div>';
-  submit.before(pasteBox);
+  // Clean, concise instructions for the 'sent' stage (no manual copy-paste required)
+  const sentGuide = document.createElement('div');
+  sentGuide.className = 'reset-sent-guide';
+  sentGuide.id = 'resetSentGuide';
+  sentGuide.hidden = true;
+  sentGuide.innerHTML =
+    '<p class="reset-sent-title">Langkah selanjutnya</p>' +
+    '<ul class="reset-sent-list">' +
+    '<li>Buka email dari <strong>Sidaps Portfolio</strong> dan klik tombol <strong>Buat Kata Sandi Baru</strong>.</li>' +
+    '<li>Periksa folder <strong>Spam</strong> atau <strong>Promosi</strong> bila email belum terlihat.</li>' +
+    '<li>Tautan berlaku selama 15 menit dan hanya dapat dipakai satu kali.</li>' +
+    '</ul>';
+  submit.before(sentGuide);
 
   // Quiet footer navigation for reset mode
   const actions = document.createElement('div');
@@ -118,8 +119,6 @@
     '<button type="button" id="otpBackToLogin">← Kembali ke halaman Masuk</button>';
   submit.after(actions);
 
-  const oobInput = document.getElementById('oobLinkInput');
-  const oobOpenBtn = document.getElementById('oobOpenFormBtn');
   const resendBtn = document.getElementById('otpResend');
   const backBtn = document.getElementById('otpBackToLogin');
   const baseMode = window.cloudAuthSetMode;
@@ -179,7 +178,7 @@
       stepBadge.hidden = true;
       accountChip.hidden = true;
       actions.hidden = true;
-      pasteBox.hidden = true;
+      sentGuide.hidden = true;
       submit.hidden = false;
       if (emailField) emailField.hidden = false;
       email.required = true;
@@ -211,7 +210,7 @@
       accountChip.hidden = true;
     }
 
-    pasteBox.hidden = !isSent;
+    sentGuide.hidden = !isSent;
 
     if (emailField) {
       emailField.hidden = !isEmail;
@@ -271,7 +270,6 @@
       return false;
     }
     busy = true;
-    if (oobOpenBtn) oobOpenBtn.disabled = true;
     notice('', '');
     try {
       let emailFromCode = '';
@@ -297,7 +295,6 @@
       return false;
     } finally {
       busy = false;
-      if (oobOpenBtn) oobOpenBtn.disabled = false;
     }
   }
 
@@ -329,27 +326,11 @@
 
   window.cloudAuthSetMode = setMode;
 
-  if (oobOpenBtn && oobInput) {
-    oobOpenBtn.onclick = () => {
-      if (busy) return;
-      verifyAndActivateReset(oobInput.value);
-    };
-    oobInput.addEventListener('paste', () => {
-      setTimeout(() => {
-        const pasted = oobInput.value.trim();
-        if (extractResetCredential(pasted)) {
-          verifyAndActivateReset(pasted);
-        }
-      }, 50);
-    });
-  }
-
   if (backBtn) {
     backBtn.onclick = () => {
       if (busy) return;
       activeCredential = null;
       verifiedEmail = '';
-      if (oobInput) oobInput.value = '';
       if (window.history && (window.location.search.includes('oobCode') || window.location.search.includes('token'))) {
         window.history.replaceState({}, '', '/?login=1');
       }

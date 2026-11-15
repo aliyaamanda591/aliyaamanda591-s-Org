@@ -55,6 +55,6 @@ input{width:100%;font:inherit;padding:11px 13px}
 <link rel="stylesheet" href="/demo-mode.css?v=1">
 <link rel="stylesheet" href="/emerald-gold.css?v=2">
 <link rel="stylesheet" href="/login-experience.css?v=1">
-<link rel="stylesheet" href="/recovery-otp.css?v=4">
+<link rel="stylesheet" href="/recovery-otp.css?v=5">
 </head>
 <body class="login-page">`;

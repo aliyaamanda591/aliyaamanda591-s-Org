@@ -1,7 +1,6 @@
 /* Dedicated, distraction-free Password Reset & New Password UI for Sidaps Portfolio */
-#emailOtpField[hidden],
 .recovery-otp-actions[hidden],
-.oob-paste-box[hidden],
+.reset-sent-guide[hidden],
 .reset-account-chip[hidden],
 .reset-step-badge[hidden] {
   display: none !important;
@@ -79,10 +78,10 @@ html[data-sidaps-theme="light"] #authBack .reset-account-chip {
   border-color: #cfe0d5;
 }
 
-/* Clean, minimal paste box on the 'Check your email' screen */
-.oob-paste-box {
-  margin: 4px 0 6px;
-  padding: 14px;
+/* Concise next-steps card on the 'Check your email' screen */
+.reset-sent-guide {
+  margin: 4px 0 8px;
+  padding: 15px 16px;
   border-radius: 12px;
   border: 1px solid rgba(141, 185, 158, 0.22);
   background: rgba(8, 29, 23, 0.55);
@@ -90,45 +89,40 @@ html[data-sidaps-theme="light"] #authBack .reset-account-chip {
   flex-direction: column;
   gap: 8px;
 }
-html[data-sidaps-theme="light"] #authBack .oob-paste-box {
+html[data-sidaps-theme="light"] #authBack .reset-sent-guide {
   background: #f6faf7;
   border-color: #d4e3d9;
 }
-.oob-paste-box label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #dae6dd;
+.reset-sent-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #dfc58d;
 }
-html[data-sidaps-theme="light"] #authBack .oob-paste-box label {
-  color: #173c2d;
+html[data-sidaps-theme="light"] #authBack .reset-sent-title {
+  color: #0d7b50;
 }
-.oob-paste-row {
+.reset-sent-list {
+  margin: 0;
+  padding-left: 16px;
   display: flex;
-  gap: 8px;
-  align-items: stretch;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #c8d8ce;
 }
-.oob-paste-row input {
-  flex: 1;
-  min-width: 0;
-  height: 42px !important;
-  min-height: 42px !important;
-  padding: 8px 12px !important;
-  font-size: 13px !important;
-  border-radius: 9px !important;
-}
-.oob-paste-row button {
-  flex-shrink: 0;
-  min-height: 42px;
-  padding: 8px 14px;
-  font-size: 12px;
+.reset-sent-list strong {
+  color: #f2f5fa;
   font-weight: 600;
-  border-radius: 9px;
-  white-space: nowrap;
 }
-@media (max-width: 440px) {
-  .oob-paste-row {
-    flex-direction: column;
-  }
+html[data-sidaps-theme="light"] #authBack .reset-sent-list {
+  color: #365244;
+}
+html[data-sidaps-theme="light"] #authBack .reset-sent-list strong {
+  color: #173c2d;
 }
 
 /* Quiet footer navigation inside reset mode */
