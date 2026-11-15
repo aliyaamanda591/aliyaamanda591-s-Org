@@ -9,6 +9,7 @@ const SAFE_FILES = [
   'lib/firebase-auth.ts',
   'lib/email-auth.ts',
   'lib/email-auth-client.js',
+  'lib/landing-html.ts',
   'lib/login-html.ts',
   'lib/portfolio-html.ts',
   'lib/recovery-mail.ts',
@@ -16,6 +17,22 @@ const SAFE_FILES = [
   'public/recovery-otp.css',
   'public/login-experience.js',
 ];
+
+const SAFE_DIRS = ['lib/auth', 'lib/landing', 'lib/login', 'lib/portfolio'];
+
+function copyDirRecursive(srcDir, dstDir) {
+  fs.rmSync(dstDir, { recursive: true, force: true });
+  fs.mkdirSync(dstDir, { recursive: true });
+  for (const entry of fs.readdirSync(srcDir, { withFileTypes: true })) {
+    const src = path.join(srcDir, entry.name);
+    const dst = path.join(dstDir, entry.name);
+    if (entry.isDirectory()) {
+      copyDirRecursive(src, dst);
+    } else {
+      fs.copyFileSync(src, dst);
+    }
+  }
+}
 
 const cwd = process.cwd();
 const args = process.argv.slice(2);
@@ -39,9 +56,19 @@ if (fromDir) {
     fs.mkdirSync(path.dirname(dstPath), { recursive: true });
     fs.copyFileSync(srcPath, dstPath);
   }
+  for (const relDir of SAFE_DIRS) {
+    const srcDir = path.join(fromDir, relDir);
+    if (!fs.existsSync(srcDir)) {
+      throw new Error('Folder sumber tidak ditemukan: ' + relDir);
+    }
+    copyDirRecursive(srcDir, path.join(cwd, relDir));
+  }
 } else {
   execFileSync('git', ['fetch', SOURCE_REPO, 'main'], { stdio: 'inherit' });
-  execFileSync('git', ['checkout', 'FETCH_HEAD', '--', ...SAFE_FILES], { stdio: 'inherit' });
+  for (const relDir of SAFE_DIRS) {
+    fs.rmSync(path.join(cwd, relDir), { recursive: true, force: true });
+  }
+  execFileSync('git', ['checkout', 'FETCH_HEAD', '--', ...SAFE_FILES, ...SAFE_DIRS], { stdio: 'inherit' });
 }
 
 // 1. Adapt lib/recovery-mail.ts to read Cloudflare Workers env first, then process.env
@@ -104,7 +131,9 @@ execFileSync('git', ['rm', '-f', '--ignore-unmatch', 'scripts/apply-to-sidaps-ma
   stdio: 'ignore',
 });
 
-execFileSync('git', ['add', ...SAFE_FILES, 'lib/auth-crypto.ts', 'cloudflare-env.d.ts'], { stdio: 'inherit' });
+execFileSync('git', ['add', ...SAFE_FILES, ...SAFE_DIRS, 'lib/auth-crypto.ts', 'cloudflare-env.d.ts'], {
+  stdio: 'inherit',
+});
 
 if (shouldPush) {
   const status = execFileSync('git', ['status', '--porcelain'], { encoding: 'utf8' }).trim();

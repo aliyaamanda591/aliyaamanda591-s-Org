@@ -7,6 +7,10 @@ import { sessionCookie, SESSION_COOKIE, validatePassword } from './auth-crypto';
 import { FirebaseAuthRestError } from './firebase-auth';
 import { validateState } from './state-validation';
 import { buildBrandedResetEmail, hasCustomMailer, sendBrandedResetEmail } from './recovery-mail';
+import { landingHtml } from './landing-html';
+import { loginHtml } from './login-html';
+import { portfolioHtml } from './portfolio-html';
+import { renderDemoPortfolio } from './demo-portfolio';
 
 test('createSqliteD1 runs drizzle migrations and supports prepare/bind/first/all/run/batch', async () => {
   const db = createSqliteD1(':memory:', path.join(process.cwd(), 'drizzle'));
@@ -148,6 +152,26 @@ test('password_reset_otps table DDL is idempotent when missing from an older dat
     .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='password_reset_otps'")
     .first<{ name: string }>();
   assert.equal(row?.name, 'password_reset_otps');
+});
+
+test('modular landing, login, and portfolio HTML assemblies include required markers and demo compatibility', () => {
+  assert.ok(landingHtml.includes('id="marketWatch"'));
+  assert.ok(landingHtml.includes('landing_hero') === false);
+  assert.ok(landingHtml.includes('Sidaps Portfolio'));
+
+  assert.ok(loginHtml.includes('id="emailAuthForm"'));
+  assert.ok(loginHtml.includes('/recovery-otp.js?v=6'));
+  assert.ok(loginHtml.includes('/login-experience.js?v=4'));
+
+  assert.ok(portfolioHtml.includes('/*__CLOUD_BOOTSTRAP__*/null'));
+  assert.ok(portfolioHtml.includes('const stockCatalog='));
+  assert.ok(portfolioHtml.includes('let cryptoCatalog='));
+  assert.ok(portfolioHtml.includes('const PLATFORM_CATALOG='));
+
+  const demoHtml = renderDemoPortfolio(portfolioHtml);
+  assert.ok(demoHtml.includes('Trader Demo'));
+  assert.ok(demoHtml.includes('/demo-mode.js?v=1'));
+  assert.ok(!demoHtml.includes('/*__CLOUD_BOOTSTRAP__*/null'));
 });
 
 
