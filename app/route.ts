@@ -12,6 +12,21 @@ export async function GET(request:Request){
   const url=new URL(request.url);
   if(url.searchParams.get('view')==='landing')return landingResponse();
   if(url.searchParams.get('demo')==='1')return new Response(renderDemoPortfolio(portfolioHtml),{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'same-origin'}});
+  const isPasswordReset =
+    url.searchParams.has('oobCode') ||
+    url.searchParams.has('token') ||
+    url.searchParams.get('mode') === 'resetPassword';
+  if (isPasswordReset) {
+    return new Response(loginHtml, {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'private, no-store',
+        Vary: 'Cookie,oai-authenticated-user-id',
+        'X-Content-Type-Options': 'nosniff',
+        'Referrer-Policy': 'same-origin',
+      },
+    });
+  }
   const user=await resolveIdentity();let bootstrap:unknown=null;
   if(!user&&!url.searchParams.has('login'))return landingResponse();
   if(!user)return new Response(loginHtml,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'private, no-store','Vary':'Cookie,oai-authenticated-user-id','X-Content-Type-Options':'nosniff','Referrer-Policy':'same-origin'}});

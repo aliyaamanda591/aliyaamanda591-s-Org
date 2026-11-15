@@ -4,6 +4,7 @@ import path from 'node:path';
 import { runWithRequestHeaders } from './lib/request-context';
 import { getSqliteD1 } from './lib/d1-sqlite';
 import { GET as handleHome } from './app/route';
+import { GET as handleResetPassword } from './app/reset-password/route';
 import { GET as handleStateGet, PUT as handleStatePut } from './app/api/state/route';
 import { POST as handleAuthPost } from './app/api/auth/[action]/route';
 import { GET as handleMarketBoardGet } from './app/api/market-board/route';
@@ -20,23 +21,35 @@ app.set('trust proxy', true);
 app.use(
   express.static(path.join(process.cwd(), 'public'), {
     index: false,
-    maxAge: '1h',
+    maxAge: 0,
   }),
 );
 
 app.use(express.raw({ type: '*/*', limit: '2mb' }));
 
-function toWebRequest(req: ExpressRequest): Request {
-  const forwardedProto = req.headers['x-forwarded-proto'];
-  const proto =
-    (typeof forwardedProto === 'string' ? forwardedProto.split(',')[0].trim() : '') ||
-    req.protocol ||
-    'http';
+export function toWebRequest(req: ExpressRequest): Request {
   const forwardedHost = req.headers['x-forwarded-host'];
   const host =
     (typeof forwardedHost === 'string' ? forwardedHost.split(',')[0].trim() : '') ||
     req.headers.host ||
     'localhost:3000';
+
+  const forwardedProto = req.headers['x-forwarded-proto'];
+  let proto =
+    (typeof forwardedProto === 'string' ? forwardedProto.split(',')[0].trim() : '') ||
+    req.protocol ||
+    'http';
+
+  const originHeader = req.headers.origin;
+  const refererHeader = req.headers.referer;
+  if (typeof originHeader === 'string' && originHeader.startsWith('https://')) {
+    proto = 'https';
+  } else if (typeof refererHeader === 'string' && refererHeader.startsWith('https://')) {
+    proto = 'https';
+  } else if (host && !/^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(host)) {
+    proto = 'https';
+  }
+
   const url = `${proto}://${host}${req.originalUrl}`;
 
   const webHeaders = new Headers();
@@ -48,6 +61,8 @@ function toWebRequest(req: ExpressRequest): Request {
       webHeaders.set(key, value);
     }
   }
+  webHeaders.set('x-forwarded-proto', proto);
+  webHeaders.set('x-forwarded-host', host);
 
   const method = req.method.toUpperCase();
   const hasBody = method !== 'GET' && method !== 'HEAD';
@@ -64,7 +79,16 @@ function toWebRequest(req: ExpressRequest): Request {
 }
 
 async function sendWebResponse(res: ExpressResponse, response: Response) {
-  res.status(response.status);
+  let status = response.status;
+  const contentType = response.headers.get('content-type') || '';
+  // AI Studio's outer Nginx has `proxy_intercept_errors on` for 403, 502, 503, 504
+  // which replaces JSON error bodies with HTML (/forbidden.html or /warmup.html).
+  if (contentType.includes('application/json')) {
+    if (status === 403) status = 401;
+    else if (status === 502 || status === 503 || status === 504) status = 500;
+  }
+
+  res.status(status);
   const setCookies =
     typeof response.headers.getSetCookie === 'function' ? response.headers.getSetCookie() : [];
   response.headers.forEach((value, key) => {
@@ -96,6 +120,8 @@ function adapt(handler: (request: Request, context?: any) => Promise<Response>) 
 }
 
 app.get('/', adapt(handleHome));
+app.get('/reset-password', adapt(handleResetPassword));
+app.get('/__/auth/action', adapt(handleHome));
 app.get('/api/state', adapt(handleStateGet));
 app.put('/api/state', adapt(handleStatePut));
 app.post('/api/auth/:action', adapt(handleAuthPost));

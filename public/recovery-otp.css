@@ -1,12 +1,186 @@
-#emailOtpField[hidden],.recovery-otp-actions[hidden]{display:none!important}
-#emailOtpField input{width:100%;min-height:44px;box-sizing:border-box;font-size:18px;letter-spacing:.3em;font-variant-numeric:tabular-nums}
-#emailOtpField small{display:block;font-size:12px;line-height:1.5;margin-top:8px;color:inherit;opacity:.85}
-.recovery-otp-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
-.recovery-otp-actions button{min-height:40px;max-width:100%;font-size:12px;padding:8px 12px;white-space:normal}
-.recovery-otp-actions button:last-child{flex-basis:100%;background:transparent;box-shadow:none;text-decoration:underline;text-underline-offset:3px}
-#emailAddress[readonly]{opacity:.8}
-[data-auth-mode="recover"] .login-recovery-link{display:none}
-#emailAuthMessage[data-state=error]{color:#c7495e}
-[data-sidaps-theme=dark] #emailAuthMessage[data-state=error]{color:#f4a8b6}
-#emailAuthMessage[data-state=success]{color:#368064}
-[data-sidaps-theme=dark] #emailAuthMessage[data-state=success]{color:#b0d4bd}
+/* Dedicated, distraction-free Password Reset & New Password UI for Sidaps Portfolio */
+#emailOtpField[hidden],
+.recovery-otp-actions[hidden],
+.oob-paste-box[hidden],
+.reset-account-chip[hidden],
+.reset-step-badge[hidden] {
+  display: none !important;
+}
+
+/* Hide all login/signup/social/demo chrome when in password recovery / new password mode */
+#authBack[data-auth-mode="recover"] .login-recovery-link,
+#authBack[data-auth-mode="recover"] .google-divider,
+#authBack[data-auth-mode="recover"] #googleSignInButton,
+#authBack[data-auth-mode="recover"] #googleAuthMessage,
+#authBack[data-auth-mode="recover"] #googleAuthHelp,
+#authBack[data-auth-mode="recover"] .email-auth-links,
+#authBack[data-auth-mode="recover"] .demo-entry,
+#authBack[data-auth-mode="recover"] #registerSecurityNote {
+  display: none !important;
+}
+
+/* Subtle step icon badge at top of reset card */
+.reset-step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  background: rgba(141, 185, 158, 0.12);
+  border: 1px solid rgba(207, 179, 118, 0.32);
+  color: #dfc58d;
+}
+.reset-step-badge svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+html[data-sidaps-theme="light"] #authBack .reset-step-badge {
+  background: #edf4ee;
+  border-color: #cde0d4;
+  color: #0d7b50;
+}
+
+/* Subtle non-input account indicator chip for 'sent' and 'oob-reset' stages */
+.reset-account-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #d6e6dc;
+  background: rgba(8, 29, 23, 0.75);
+  border: 1px solid rgba(141, 185, 158, 0.25);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.reset-account-chip svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  stroke: #cfb376;
+  fill: none;
+  stroke-width: 1.8;
+}
+html[data-sidaps-theme="light"] #authBack .reset-account-chip {
+  color: #173c2d;
+  background: #eff6f1;
+  border-color: #cfe0d5;
+}
+
+/* Clean, minimal paste box on the 'Check your email' screen */
+.oob-paste-box {
+  margin: 4px 0 6px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(141, 185, 158, 0.22);
+  background: rgba(8, 29, 23, 0.55);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+html[data-sidaps-theme="light"] #authBack .oob-paste-box {
+  background: #f6faf7;
+  border-color: #d4e3d9;
+}
+.oob-paste-box label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #dae6dd;
+}
+html[data-sidaps-theme="light"] #authBack .oob-paste-box label {
+  color: #173c2d;
+}
+.oob-paste-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.oob-paste-row input {
+  flex: 1;
+  min-width: 0;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  border-radius: 9px !important;
+}
+.oob-paste-row button {
+  flex-shrink: 0;
+  min-height: 42px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 9px;
+  white-space: nowrap;
+}
+@media (max-width: 440px) {
+  .oob-paste-row {
+    flex-direction: column;
+  }
+}
+
+/* Quiet footer navigation inside reset mode */
+.recovery-otp-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(141, 185, 158, 0.14);
+}
+html[data-sidaps-theme="light"] #authBack .recovery-otp-actions {
+  border-top-color: #e2ece6;
+}
+.recovery-otp-actions #otpResend {
+  width: 100%;
+  min-height: 42px;
+  font-size: 12px;
+  border-radius: 9px;
+}
+.recovery-otp-actions #otpBackToLogin {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #a8c3b1 !important;
+  font: 500 12px system-ui, sans-serif !important;
+  min-height: 32px;
+  padding: 4px 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.recovery-otp-actions #otpBackToLogin:hover {
+  color: #dfc58d !important;
+}
+html[data-sidaps-theme="light"] #authBack .recovery-otp-actions #otpBackToLogin {
+  color: #566f60 !important;
+}
+html[data-sidaps-theme="light"] #authBack .recovery-otp-actions #otpBackToLogin:hover {
+  color: #173c2d !important;
+}
+
+#emailAuthMessage[data-state="error"] {
+  color: #c7495e;
+}
+[data-sidaps-theme="dark"] #emailAuthMessage[data-state="error"] {
+  color: #f4a8b6;
+}
+#emailAuthMessage[data-state="success"] {
+  color: #368064;
+}
+[data-sidaps-theme="dark"] #emailAuthMessage[data-state="success"] {
+  color: #b0d4bd;
+}

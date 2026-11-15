@@ -19,7 +19,8 @@
  // Replay on every login-page load and back/forward restoration, without storage.
  function startIntro(){
   clearTimeout(introTimer);clearTimeout(window.sidapsIntroWatchdog);
-  if(reduced?.matches||!intro||document.hidden){finishIntro();return;}
+  const isResetLink=/[?&](oobCode=|token=|mode=resetPassword)/i.test(window.location.search);
+  if(reduced?.matches||!intro||document.hidden||isResetLink){finishIntro();return;}
   root.classList.remove('login-intro-pending');
   intro.hidden=false;intro.setAttribute('aria-hidden','false');entry.inert=true;entry.setAttribute('aria-hidden','true');
   // One layout read resets the finite CSS sequence, including a restored page.

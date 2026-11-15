@@ -24,8 +24,8 @@ export function canonicalEmail(value: unknown) {
 }
 
 export function validatePassword(value: unknown): string {
-  if (typeof value !== 'string' || value.length < 12) {
-    throw Error('Password minimal 12 karakter.');
+  if (typeof value !== 'string' || value.length < 8) {
+    throw Error('Password minimal 8 karakter.');
   }
   if (truncates(value)) {
     throw Error('Password terlalu panjang; maksimal 72 byte UTF-8.');

@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { createSqliteD1 } from './d1-sqlite';
 import { runWithRequestHeaders } from './request-context';
-import { sessionCookie, SESSION_COOKIE } from './auth-crypto';
+import { sessionCookie, SESSION_COOKIE, validatePassword } from './auth-crypto';
+import { FirebaseAuthRestError } from './firebase-auth';
 import { validateState } from './state-validation';
+import { buildBrandedResetEmail, hasCustomMailer, sendBrandedResetEmail } from './recovery-mail';
 
 test('createSqliteD1 runs drizzle migrations and supports prepare/bind/first/all/run/batch', async () => {
   const db = createSqliteD1(':memory:', path.join(process.cwd(), 'drizzle'));
@@ -70,3 +72,63 @@ test('validateState sanitizes valid portfolio state', () => {
   assert.equal(state.profile.displayName, 'Denny');
   assert.deepEqual(state.assets, []);
 });
+
+test('validatePassword enforces 8-72 character bounds', () => {
+  assert.throws(() => validatePassword('1234567'), /Password minimal 8 karakter\./);
+  assert.equal(validatePassword('12345678'), '12345678');
+  assert.throws(() => validatePassword('a'.repeat(73)), /Password terlalu panjang; maksimal 72 byte UTF-8\./);
+});
+
+test('FirebaseAuthRestError preserves status and Firebase error code', () => {
+  const err = new FirebaseAuthRestError('Access blocked', 'TOO_MANY_ATTEMPTS_TRY_LATER', 400);
+  assert.equal(err.code, 'TOO_MANY_ATTEMPTS_TRY_LATER');
+  assert.equal(err.status, 400);
+  assert.ok(err instanceof Error);
+});
+
+test('buildBrandedResetEmail renders clean branded HTML email and detects mailer config', () => {
+  const built = buildBrandedResetEmail('user@example.com', 'https://sidaps.example/reset-password?token=abc123');
+  assert.equal(built.subject, 'Atur Ulang Kata Sandi · Sidaps Portfolio');
+  assert.ok(built.html.includes('Buat Kata Sandi Baru'));
+  assert.ok(built.html.includes('https://sidaps.example/reset-password?token=abc123'));
+  assert.ok(built.html.includes('user@example.com'));
+
+  assert.equal(hasCustomMailer({}), false);
+  assert.equal(hasCustomMailer({ BREVO_API_KEY: 'x', OWNER_EMAIL: 'a@b.com' }), true);
+  assert.equal(hasCustomMailer({ MAIL_WEBHOOK_URL: 'https://script.google.com/macros/s/abc/exec' }), true);
+});
+
+test('sendBrandedResetEmail rejects Apps Script HTTP 200 Forbidden or HTML responses and accepts ok:true', async () => {
+  await assert.rejects(
+    () =>
+      sendBrandedResetEmail(
+        'user@example.com',
+        'https://sidaps.example/reset-password?token=abc',
+        { MAIL_WEBHOOK_URL: 'https://script.google.com/macros/s/abc/exec', MAIL_WEBHOOK_SECRET: 'wrong' },
+        (async () => new Response('Forbidden', { status: 200 })) as typeof fetch,
+      ),
+    /Forbidden/,
+  );
+
+  await assert.rejects(
+    () =>
+      sendBrandedResetEmail(
+        'user@example.com',
+        'https://sidaps.example/reset-password?token=abc',
+        { MAIL_WEBHOOK_URL: 'https://script.google.com/macros/s/abc/exec', MAIL_WEBHOOK_SECRET: 'good' },
+        (async () => new Response('<html>Sign in</html>', { status: 200 })) as typeof fetch,
+      ),
+    /HTML/,
+  );
+
+  await assert.doesNotReject(() =>
+    sendBrandedResetEmail(
+      'user@example.com',
+      'https://sidaps.example/reset-password?token=abc',
+      { MAIL_WEBHOOK_URL: 'https://script.google.com/macros/s/abc/exec', MAIL_WEBHOOK_SECRET: 'good' },
+      (async () => new Response('{"ok":true}', { status: 200 })) as typeof fetch,
+    ),
+  );
+});
+
+
