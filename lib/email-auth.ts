@@ -84,6 +84,23 @@ async function getCredential(email: string) {
     .first<Credential>();
 }
 
+let resetTableEnsured = false;
+
+export async function ensurePasswordResetTable() {
+  if (resetTableEnsured) return;
+  await database()
+    .prepare(
+      'CREATE TABLE IF NOT EXISTS password_reset_otps (email_hash text PRIMARY KEY NOT NULL, challenge_hash text NOT NULL, otp_hash text NOT NULL, user_id text, credential_version integer NOT NULL, attempts integer DEFAULT 0 NOT NULL, requested_at integer NOT NULL, expires_at integer NOT NULL, ready integer DEFAULT 0 NOT NULL, FOREIGN KEY (user_id) REFERENCES accounts(user_id) ON UPDATE no action ON DELETE no action)',
+    )
+    .run();
+  await database()
+    .prepare(
+      'CREATE UNIQUE INDEX IF NOT EXISTS password_reset_otps_challenge_hash_unique ON password_reset_otps (challenge_hash)',
+    )
+    .run();
+  resetTableEnsured = true;
+}
+
 async function limit(key: string, max: number, windowMs: number) {
   const now = Date.now();
   const row = await database()
@@ -292,6 +309,7 @@ export async function handleEmailAuth(
 
     const mailEnv = getMailEnvironment();
     if (hasCustomMailer(mailEnv)) {
+      await ensurePasswordResetTable();
       const now = Date.now();
       const ttlMs = 15 * 60_000;
       const resendMs = 60_000;
@@ -326,10 +344,14 @@ export async function handleEmailAuth(
       }
 
       const reqOrigin = new URL(request.url).origin;
-      const appUrlEnv =
-        mailEnv.APP_URL && /^https?:\/\//i.test(mailEnv.APP_URL.trim()) && !/MY_APP_URL/i.test(mailEnv.APP_URL)
-          ? new URL(mailEnv.APP_URL.trim()).origin
-          : '';
+      let appUrlEnv = '';
+      if (mailEnv.APP_URL && /^https?:\/\//i.test(mailEnv.APP_URL.trim()) && !/MY_APP_URL/i.test(mailEnv.APP_URL)) {
+        try {
+          appUrlEnv = new URL(mailEnv.APP_URL.trim()).origin;
+        } catch {
+          appUrlEnv = '';
+        }
+      }
       const isLocalReq = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(reqOrigin);
       const baseOrigin = isLocalReq && appUrlEnv ? appUrlEnv : reqOrigin;
       const resetUrl = `${baseOrigin}/reset-password?token=${encodeURIComponent(token)}`;
@@ -407,6 +429,7 @@ export async function handleEmailAuth(
   if (action === 'verify-reset') {
     const resetToken = typeof body.token === 'string' ? body.token.trim() : '';
     if (resetToken) {
+      await ensurePasswordResetTable();
       const email = decodeEmailFromResetToken(resetToken);
       if (!email) {
         return {
@@ -483,6 +506,7 @@ export async function handleEmailAuth(
   if (action === 'confirm-reset' || action === 'reset-otp') {
     const resetToken = typeof body.token === 'string' ? body.token.trim() : '';
     if (resetToken) {
+      await ensurePasswordResetTable();
       const newPassword = passwordInput(body);
       const email = decodeEmailFromResetToken(resetToken);
       if (!email) {

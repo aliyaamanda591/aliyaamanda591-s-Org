@@ -53,16 +53,16 @@ if (!recoveryMail.includes("from 'cloudflare:workers'")) {
 recoveryMail = recoveryMail.replace(
   /export function getMailEnvironment\(\): MailEnvironment \{[\s\S]*?\n\}/,
   `export function getMailEnvironment(): MailEnvironment {
-  const cf = workerEnv as unknown as MailEnvironment;
+  const cf = (workerEnv ?? {}) as unknown as MailEnvironment;
   const p: Record<string, string | undefined> = typeof process !== 'undefined' ? process.env : {};
   return {
-    RESEND_API_KEY: cf.RESEND_API_KEY ?? p.RESEND_API_KEY,
-    BREVO_API_KEY: cf.BREVO_API_KEY ?? p.BREVO_API_KEY,
-    MAIL_WEBHOOK_URL: cf.MAIL_WEBHOOK_URL ?? p.MAIL_WEBHOOK_URL,
-    MAIL_WEBHOOK_SECRET: cf.MAIL_WEBHOOK_SECRET ?? p.MAIL_WEBHOOK_SECRET,
-    AUTH_EMAIL_FROM: cf.AUTH_EMAIL_FROM ?? p.AUTH_EMAIL_FROM,
-    OWNER_EMAIL: cf.OWNER_EMAIL ?? p.OWNER_EMAIL,
-    APP_URL: cf.APP_URL ?? p.APP_URL,
+    RESEND_API_KEY: cf?.RESEND_API_KEY ?? p.RESEND_API_KEY,
+    BREVO_API_KEY: cf?.BREVO_API_KEY ?? p.BREVO_API_KEY,
+    MAIL_WEBHOOK_URL: cf?.MAIL_WEBHOOK_URL ?? p.MAIL_WEBHOOK_URL,
+    MAIL_WEBHOOK_SECRET: cf?.MAIL_WEBHOOK_SECRET ?? p.MAIL_WEBHOOK_SECRET,
+    AUTH_EMAIL_FROM: cf?.AUTH_EMAIL_FROM ?? p.AUTH_EMAIL_FROM,
+    OWNER_EMAIL: cf?.OWNER_EMAIL ?? p.OWNER_EMAIL,
+    APP_URL: cf?.APP_URL ?? p.APP_URL,
   };
 }`,
 );
@@ -100,6 +100,9 @@ const selfInsideMain = path.join(cwd, 'scripts', 'apply-to-sidaps-main.mjs');
 if (fs.existsSync(selfInsideMain)) {
   fs.unlinkSync(selfInsideMain);
 }
+execFileSync('git', ['rm', '-f', '--ignore-unmatch', 'scripts/apply-to-sidaps-main.mjs'], {
+  stdio: 'ignore',
+});
 
 execFileSync('git', ['add', ...SAFE_FILES, 'lib/auth-crypto.ts', 'cloudflare-env.d.ts'], { stdio: 'inherit' });
 

@@ -131,4 +131,23 @@ test('sendBrandedResetEmail rejects Apps Script HTTP 200 Forbidden or HTML respo
   );
 });
 
+test('password_reset_otps table DDL is idempotent when missing from an older database', async () => {
+  const db = createSqliteD1(':memory:', path.join(process.cwd(), 'drizzle'));
+  await db.prepare('DROP TABLE IF EXISTS password_reset_otps').run();
+  await db
+    .prepare(
+      'CREATE TABLE IF NOT EXISTS password_reset_otps (email_hash text PRIMARY KEY NOT NULL, challenge_hash text NOT NULL, otp_hash text NOT NULL, user_id text, credential_version integer NOT NULL, attempts integer DEFAULT 0 NOT NULL, requested_at integer NOT NULL, expires_at integer NOT NULL, ready integer DEFAULT 0 NOT NULL, FOREIGN KEY (user_id) REFERENCES accounts(user_id) ON UPDATE no action ON DELETE no action)',
+    )
+    .run();
+  await db
+    .prepare(
+      'CREATE UNIQUE INDEX IF NOT EXISTS password_reset_otps_challenge_hash_unique ON password_reset_otps (challenge_hash)',
+    )
+    .run();
+  const row = await db
+    .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='password_reset_otps'")
+    .first<{ name: string }>();
+  assert.equal(row?.name, 'password_reset_otps');
+});
+
 
